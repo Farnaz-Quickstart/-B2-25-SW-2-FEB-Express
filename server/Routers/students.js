@@ -1,63 +1,68 @@
 import express from 'express'
 import db from '../dbConnection.js'
 const Router = express.Router()          
-// req. body
-// req.params
 
 
 // GET all Students: http://localhost:4000/students/
 Router.get ('/',async (req,res)=> {
-  db.query ("SELECT * FROM students", (err, result)=>{
-  if (err) {
-    console.log ("Error retriving students", err)
-    return res.status(500).send ("Server error while retrieving students")
-  } 
-    res.status(200).json (result)
-})
+  try {
+    const [result] = await db.query("SELECT * FROM students")
+    res.status(200).json(result)
+  } catch (err) {
+    console.log("Error retrieving students:", err);
+    res.status(500).send("Server error while retrieving students");
+  }
 })
 
 // GET one student by ID: http://localhost:4000/students/12
-Router.get ("/:id", (req,res)=> {
+Router.get ("/:id", async (req,res)=> {
   const studentID = req.params.id
   const sql = "SELECT * FROM students WHERE student_id = ?"
-  db.query (sql, [studentID] , (err, result)=> {
-    if (err) {
-      console.error ("Error retriving student", err)
-      return res.status(500).send ("Server error while retrieving student")
+  try {
+    const result = await db.query (sql, [studentID])
+    if ( result == 0 ) {
+      return res.status(404).send("Student Not found")
     }
     res.status(200).json(result[0])
-  })
+    console.log (result)
+  } catch (err) {
+    res.status(500).send(err)
+  }
+
 })
 
 
 // POST add a new student: http://localhost:4000/students/
-Router.post ("/", (req, res)=> {
-  const {name, email} = req.body
+Router.post ("/", async (req, res)=> {
+  const { name, email } = req.body
   const sql = "INSERT INTO students (name,email) VALUES (? , ?)"
-  db.query(sql, [name, email], (err, result) => {
-    if (err) {
-      console.error("Error adding student:", err);
-      return res.status(500).send("Server error while adding student");
-    }
+  try {
+    await db.query(sql, [name, email]);
     res.status(201).send("Student added successfully");
-  });
-})
+  } catch (err) {
+    console.error("Error adding student:", err);
+    res.status(500).send("Server error while adding student");
+  }
+});
 
 
-// DELETE a student by ID: http://localhost:4000/students/:id
-Router.delete('/:id', (req, res) => {
+// DELETE a Student by ID: http://localhost:4000/students/:id
+Router.delete('/:id', async (req, res) => {
   const studentID = req.params.id;
   const sql = "DELETE FROM students WHERE student_id = ?";
-  db.query(sql, [studentID], (err, result) => {
-    if (err) {
-      console.error("Error deleting student:", err);
-      return res.status(500).send("Server error while deleting student");
-    }
+
+  try {
+    const [result] = await db.query(sql, [studentID]);
+
     if (result.affectedRows === 0) {
       return res.status(404).send("Student not found");
     }
+
     res.status(200).send("Student deleted successfully");
-  });
+  } catch (err) {
+    console.error("Error deleting student:", err);
+    res.status(500).send("Server error while deleting student");
+  }
 });
 
 export default Router;
