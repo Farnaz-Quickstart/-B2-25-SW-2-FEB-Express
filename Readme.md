@@ -9,6 +9,7 @@ npx create-react-app client             # Create React app inside 'client' folde
 cd client                               # Move into the client directory
 npm install react-bootstrap bootstrap   # Install Bootstrap
 npm install react-router-dom@latest     # Install React Router
+npm install axios                       # Install Axios
 
 
 ## Step 3: Configuration Server and database

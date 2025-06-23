@@ -6,7 +6,8 @@ import enrollmentsRouts from './Routers/enrollements.js'
 
 
 const app = express();
-app.use(cors()); // This allows all origins (good for development)
+app.use (express.json())                  // This required to 
+app.use(cors());                        // This allows all origins (good for development)
 
 
 app.use('/students', studentsRouts)     // http://localhost:4000/students/

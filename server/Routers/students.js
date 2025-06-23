@@ -34,10 +34,12 @@ Router.get ("/:id", async (req,res)=> {
 
 // POST add a new student: http://localhost:4000/students/
 Router.post ("/", async (req, res)=> {
-  const { name, email } = req.body
-  const sql = "INSERT INTO students (name,email) VALUES (? , ?)"
+  console.log ("Post request is comming ....")
+  console.log (req.body)
+  const { student_name, student_email } = req.body
+  const sql = "INSERT INTO students (student_name,student_email) VALUES (? , ?)"
   try {
-    await db.query(sql, [name, email]);
+    await db.query(sql, [student_name, student_email]);
     res.status(201).send("Student added successfully");
   } catch (err) {
     console.error("Error adding student:", err);
@@ -64,5 +66,8 @@ Router.delete('/:id', async (req, res) => {
     res.status(500).send("Server error while deleting student");
   }
 });
+
+
+
 
 export default Router;
