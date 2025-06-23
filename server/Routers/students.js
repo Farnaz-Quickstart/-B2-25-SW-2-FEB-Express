@@ -28,7 +28,6 @@ Router.get ("/:id", async (req,res)=> {
   } catch (err) {
     res.status(500).send(err)
   }
-
 })
 
 
@@ -66,8 +65,6 @@ Router.delete('/:id', async (req, res) => {
     res.status(500).send("Server error while deleting student");
   }
 });
-
-
 
 
 export default Router;
