@@ -51,8 +51,8 @@ CREATE DATABASE `student_project_db` ;
 USE `student_project_db`;
 CREATE TABLE `students` (
   `student_id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(80) NOT NULL,
-  `email` varchar(80) DEFAULT NULL
+  `student_name` varchar(80) NOT NULL,
+  `student_email` varchar(80) DEFAULT NULL
 );
 
 CREATE TABLE `courses` (
@@ -68,6 +68,13 @@ CREATE TABLE enrollments (
   enrollment_date VARCHAR(45),
   FOREIGN KEY (student_id) REFERENCES students(student_id),
   FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
 );
 
 INSERT INTO courses (course_name, instructoer) VALUES
