@@ -4,9 +4,21 @@ import axios from 'axios'
 
 export default function ListStudents() {
   const [students, setStudents] = useState([
-    {student_name:"farnaz", student_email: "a@gmail.com"},
-    {student_name:"Chase", student_email: "ab@gmail.com"}
+    {student_id: "", student_name:"", student_email: ""}
 ])
+const [selectedStudent, setSelectedStudent] = useState(null);
+
+async function handleStudentClick (event, StudentID) {
+  console.log ("hello")
+  try {
+    const response = await axios.get (`http://localhost:4000/students/${StudentID}`)
+    console.log (response)
+    setSelectedStudent (response.data)
+  }
+  catch (error) {
+    console.log (error)
+  }
+} 
 
 useEffect(() => {
   const fetchStudents = async () => {
@@ -16,9 +28,6 @@ useEffect(() => {
   }
   fetchStudents();
 }, [])
-
-
-
 
   return (
     <Table striped>
@@ -38,7 +47,10 @@ useEffect(() => {
         {students.map ((student, index)=> (
           <tr key={index}>
             <td>{index+1}</td>
-            <td>{student.student_name}</td>
+            <td><a onClick={(event)=>{
+              event.preventDefault();
+              handleStudentClick(event, student.student_id)
+              }}>{student.student_name}</a></td>
             <td>{student.student_email}</td>
           </tr>
         ))}
