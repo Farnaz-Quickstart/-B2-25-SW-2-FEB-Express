@@ -11,8 +11,8 @@ db.connect ((err)=> {
   if (err) {
     console.log ("Error on DB connect:", err)
     return;
-  }
-  console.log ("Connected to School DB")
+  } else
+    console.log ("Connected to School DB")
 })
 
 export default db;

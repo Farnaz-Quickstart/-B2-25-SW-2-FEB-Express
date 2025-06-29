@@ -5,6 +5,7 @@ const Router = express.Router()
 
 // GET all Students: http://localhost:4000/students/
 Router.get ('/',async (req,res)=> {
+  console.log ("asdasdasdsa")
   try {
     const [result] = await db.query("SELECT * FROM students")
     res.status(200).json(result)
